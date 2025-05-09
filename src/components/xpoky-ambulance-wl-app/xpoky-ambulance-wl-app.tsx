@@ -54,6 +54,7 @@ export class XpokyAmbulanceWlApp {
       <Host>
         { element === "editor"
         ? <xpoky-ambulance-wl-editor entry-id={entryId}
+            ambulance-id={this.ambulanceId} api-base={this.apiBase}
             oneditor-closed={ () => navigate("./list")} >
           </xpoky-ambulance-wl-editor>
         : <xpoky-ambulance-wl-list  ambulance-id={this.ambulanceId} api-base={this.apiBase}
