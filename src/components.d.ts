@@ -21,12 +21,16 @@ export namespace Components {
         "middle": string;
     }
     interface XpokyAmbulanceWlApp {
+        "ambulanceId": string;
+        "apiBase": string;
         "basePath": string;
     }
     interface XpokyAmbulanceWlEditor {
         "entryId": string;
     }
     interface XpokyAmbulanceWlList {
+        "ambulanceId": string;
+        "apiBase": string;
     }
 }
 export interface XpokyAmbulanceWlEditorCustomEvent<T> extends CustomEvent<T> {
@@ -107,6 +111,8 @@ declare namespace LocalJSX {
         "middle"?: string;
     }
     interface XpokyAmbulanceWlApp {
+        "ambulanceId"?: string;
+        "apiBase"?: string;
         "basePath"?: string;
     }
     interface XpokyAmbulanceWlEditor {
@@ -114,6 +120,8 @@ declare namespace LocalJSX {
         "onEditor-closed"?: (event: XpokyAmbulanceWlEditorCustomEvent<string>) => void;
     }
     interface XpokyAmbulanceWlList {
+        "ambulanceId"?: string;
+        "apiBase"?: string;
         "onEntry-clicked"?: (event: XpokyAmbulanceWlListCustomEvent<string>) => void;
     }
     interface IntrinsicElements {
