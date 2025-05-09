@@ -20,8 +20,22 @@ export namespace Components {
          */
         "middle": string;
     }
+    interface XpokyAmbulanceWlApp {
+        "basePath": string;
+    }
+    interface XpokyAmbulanceWlEditor {
+        "entryId": string;
+    }
     interface XpokyAmbulanceWlList {
     }
+}
+export interface XpokyAmbulanceWlEditorCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLXpokyAmbulanceWlEditorElement;
+}
+export interface XpokyAmbulanceWlListCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLXpokyAmbulanceWlListElement;
 }
 declare global {
     interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
@@ -30,7 +44,41 @@ declare global {
         prototype: HTMLMyComponentElement;
         new (): HTMLMyComponentElement;
     };
+    interface HTMLXpokyAmbulanceWlAppElement extends Components.XpokyAmbulanceWlApp, HTMLStencilElement {
+    }
+    var HTMLXpokyAmbulanceWlAppElement: {
+        prototype: HTMLXpokyAmbulanceWlAppElement;
+        new (): HTMLXpokyAmbulanceWlAppElement;
+    };
+    interface HTMLXpokyAmbulanceWlEditorElementEventMap {
+        "editor-closed": string;
+    }
+    interface HTMLXpokyAmbulanceWlEditorElement extends Components.XpokyAmbulanceWlEditor, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLXpokyAmbulanceWlEditorElementEventMap>(type: K, listener: (this: HTMLXpokyAmbulanceWlEditorElement, ev: XpokyAmbulanceWlEditorCustomEvent<HTMLXpokyAmbulanceWlEditorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLXpokyAmbulanceWlEditorElementEventMap>(type: K, listener: (this: HTMLXpokyAmbulanceWlEditorElement, ev: XpokyAmbulanceWlEditorCustomEvent<HTMLXpokyAmbulanceWlEditorElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLXpokyAmbulanceWlEditorElement: {
+        prototype: HTMLXpokyAmbulanceWlEditorElement;
+        new (): HTMLXpokyAmbulanceWlEditorElement;
+    };
+    interface HTMLXpokyAmbulanceWlListElementEventMap {
+        "entry-clicked": string;
+    }
     interface HTMLXpokyAmbulanceWlListElement extends Components.XpokyAmbulanceWlList, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLXpokyAmbulanceWlListElementEventMap>(type: K, listener: (this: HTMLXpokyAmbulanceWlListElement, ev: XpokyAmbulanceWlListCustomEvent<HTMLXpokyAmbulanceWlListElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLXpokyAmbulanceWlListElementEventMap>(type: K, listener: (this: HTMLXpokyAmbulanceWlListElement, ev: XpokyAmbulanceWlListCustomEvent<HTMLXpokyAmbulanceWlListElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLXpokyAmbulanceWlListElement: {
         prototype: HTMLXpokyAmbulanceWlListElement;
@@ -38,6 +86,8 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "my-component": HTMLMyComponentElement;
+        "xpoky-ambulance-wl-app": HTMLXpokyAmbulanceWlAppElement;
+        "xpoky-ambulance-wl-editor": HTMLXpokyAmbulanceWlEditorElement;
         "xpoky-ambulance-wl-list": HTMLXpokyAmbulanceWlListElement;
     }
 }
@@ -56,10 +106,20 @@ declare namespace LocalJSX {
          */
         "middle"?: string;
     }
+    interface XpokyAmbulanceWlApp {
+        "basePath"?: string;
+    }
+    interface XpokyAmbulanceWlEditor {
+        "entryId"?: string;
+        "onEditor-closed"?: (event: XpokyAmbulanceWlEditorCustomEvent<string>) => void;
+    }
     interface XpokyAmbulanceWlList {
+        "onEntry-clicked"?: (event: XpokyAmbulanceWlListCustomEvent<string>) => void;
     }
     interface IntrinsicElements {
         "my-component": MyComponent;
+        "xpoky-ambulance-wl-app": XpokyAmbulanceWlApp;
+        "xpoky-ambulance-wl-editor": XpokyAmbulanceWlEditor;
         "xpoky-ambulance-wl-list": XpokyAmbulanceWlList;
     }
 }
@@ -68,6 +128,8 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+            "xpoky-ambulance-wl-app": LocalJSX.XpokyAmbulanceWlApp & JSXBase.HTMLAttributes<HTMLXpokyAmbulanceWlAppElement>;
+            "xpoky-ambulance-wl-editor": LocalJSX.XpokyAmbulanceWlEditor & JSXBase.HTMLAttributes<HTMLXpokyAmbulanceWlEditorElement>;
             "xpoky-ambulance-wl-list": LocalJSX.XpokyAmbulanceWlList & JSXBase.HTMLAttributes<HTMLXpokyAmbulanceWlListElement>;
         }
     }
