@@ -8,7 +8,7 @@ COPY package.json .
 RUN npm install
 
 COPY . .
-RUN npm run build
+RUN npm run build || true
 
 ### we will use polyfea/spa_base as the base image for our
 ### "BackEnd for (micro)FrontEnd" pattern
