@@ -19,7 +19,6 @@ import type {
 } from '../models';
 import {
     ConditionFromJSON,
-    ConditionToJSON,
 } from '../models';
 
 export interface GetConditionsRequest {
