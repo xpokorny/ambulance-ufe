@@ -48,7 +48,7 @@ export class XpokyAmbulanceWlList {
           {this.waitingPatients.map((patient) =>
             <md-list-item onClick={ () => this.entryClicked.emit(patient.id)}>
               <div slot="headline">{patient.name}</div>
-              <div slot="supporting-text">{"Čakáte od: " + patient.waitingSince.toLocaleString() + " | Predpokladaný vstup: " + patient.estimatedStart?.toLocaleString()}</div>
+              <div slot="supporting-text">{"Predpokladaný vstup: " + patient.estimatedStart?.toLocaleString()}</div>
               <md-icon slot="start">person</md-icon>
             </md-list-item>
           )}
