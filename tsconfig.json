@@ -15,23 +15,12 @@
     "noUnusedParameters": true,
     "jsx": "react",
     "jsxFactory": "h",
-    "jsxFragmentFactory": "h.Fragment",
-    "skipLibCheck": true,
-    "noEmitOnError": false
+    "jsxFragmentFactory": "h.Fragment"
   },
   "include": [
     "src"
   ],
   "exclude": [
     "node_modules"
-  ],
-  "overrides": [
-    {
-      "include": ["src/api/**/*.ts"],
-      "compilerOptions": {
-        "noUnusedLocals": false,
-        "noUnusedParameters": false
-      }
-    }
   ]
 }
