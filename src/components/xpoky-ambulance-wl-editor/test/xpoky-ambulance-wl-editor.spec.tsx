@@ -1,84 +1,77 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { XpokyAmbulanceWlEditor } from '../xpoky-ambulance-wl-editor';
 import fetchMock from 'jest-fetch-mock';
-import { Condition, WaitingListEntry } from '../../../api/ambulance-wl';
+import { Appointment } from '../../../api/ambulance-wl';
 
 describe('xpoky-ambulance-wl-editor', () => {
-  const sampleEntry: WaitingListEntry = {
-    id: "entry-1",
-    patientId: "p-1",
-    name: "Juraj Prvý",
-    waitingSince: new Date("20240203T12:00"),
-    estimatedDurationMinutes: 20,
-    condition: {
-      value: "Nevoľnosť",
-      code: "nausea",
-      reference: "https://zdravoteka.sk/priznaky/nevolnost/"
-    }
-  };
-
-  const sampleConditions: Condition[] = [
-    {
-      value: "Teploty",
-      code: "subfebrilia",
-      reference: "https://zdravoteka.sk/priznaky/zvysena-telesna-teplota/",
-      typicalDurationMinutes: 20
-    },
-    {
-      value: "Nevoľnosť",
-      code: "nausea",
-      reference: "https://zdravoteka.sk/priznaky/nevolnost/",
-      typicalDurationMinutes: 45
-    },
-  ];
-
-  let delay = async (milliseconds: number) => await new Promise<void>(resolve => {
-    setTimeout(() => resolve(), milliseconds);
-  });
-
-  beforeAll(() => {
-    fetchMock.enableMocks();
-  });
-
-  afterEach(() => {
+  beforeEach(() => {
     fetchMock.resetMocks();
   });
 
-  it('buttons shall be of different type', async () => {
-    fetchMock.mockResponses(
-      [JSON.stringify(sampleEntry), { status: 200 }],
-      [JSON.stringify(sampleConditions), { status: 200 }]
-    );
-
+  it('renders', async () => {
     const page = await newSpecPage({
       components: [XpokyAmbulanceWlEditor],
-      html: `<xpoky-ambulance-wl-editor entry-id="test-entry" ambulance-id="test-ambulance" api-base="http://sample.test/api"></xpoky-ambulance-wl-editor>`,
+      html: `<xpoky-ambulance-wl-editor></xpoky-ambulance-wl-editor>`,
     });
-
-    await delay(300);
-    await page.waitForChanges();
-
-    const items: any = await page.root.shadowRoot.querySelectorAll("md-filled-button");
-    expect(items.length).toEqual(1);
-    // Continue with other assertions...
+    expect(page.root).toEqualHtml(`
+      <xpoky-ambulance-wl-editor>
+        <mock:shadow-root>
+          <div class="loading">Loading...</div>
+        </mock:shadow-root>
+      </xpoky-ambulance-wl-editor>
+    `);
   });
 
-  it('first text field is patient name', async () => {
-    fetchMock.mockResponses(
-      [JSON.stringify(sampleEntry), { status: 200 }],
-      [JSON.stringify(sampleConditions), { status: 200 }]
-    );
+  it('renders with error message', async () => {
+    const page = await newSpecPage({
+      components: [XpokyAmbulanceWlEditor],
+      html: `<xpoky-ambulance-wl-editor></xpoky-ambulance-wl-editor>`,
+    });
+    const editor = page.rootInstance as XpokyAmbulanceWlEditor;
+    editor.errorMessage = "Test error message";
+    await page.waitForChanges();
+    expect(page.root).toEqualHtml(`
+      <xpoky-ambulance-wl-editor>
+        <mock:shadow-root>
+          <div class="error">Test error message</div>
+        </mock:shadow-root>
+      </xpoky-ambulance-wl-editor>
+    `);
+  });
+
+  it('renders with appointment data', async () => {
+    const appointment: Appointment = {
+      id: "1",
+      patient: { id: "1", name: "John Doe", role: "patient" },
+      doctor: { id: "2", name: "Dr. Smith", role: "doctor" },
+      location: { id: "1", name: "Main Hospital", address: "123 Main St" },
+      dateTime: new Date("2024-03-20T10:00:00"),
+      createdBy: { id: "1", name: "John Doe", role: "patient" }
+    };
 
     const page = await newSpecPage({
       components: [XpokyAmbulanceWlEditor],
-      html: `<xpoky-ambulance-wl-editor entry-id="test-entry" ambulance-id="test-ambulance" api-base="http://sample.test/api"></xpoky-ambulance-wl-editor>`,
+      html: `<xpoky-ambulance-wl-editor></xpoky-ambulance-wl-editor>`,
     });
-
-    await delay(300);
+    const editor = page.rootInstance as XpokyAmbulanceWlEditor;
+    editor.appointment = appointment;
     await page.waitForChanges();
-
-    const items: any = await page.root.shadowRoot.querySelectorAll("md-filled-text-field");
-    expect(items.length).toBeGreaterThanOrEqual(1);
-    expect(items[0].getAttribute("value")).toEqual(sampleEntry.name);
+    expect(page.root).toEqualHtml(`
+      <xpoky-ambulance-wl-editor>
+        <mock:shadow-root>
+          <form>
+            <md-filled-text-field label="Patient Name" value="John Doe"></md-filled-text-field>
+            <md-filled-select label="Doctor" value="2"></md-filled-select>
+            <md-filled-select label="Location" value="1"></md-filled-select>
+            <md-filled-text-field label="Date and Time" type="datetime-local" value="2024-03-20T10:00"></md-filled-text-field>
+            <div class="actions">
+              <md-filled-button>Update</md-filled-button>
+              <md-filled-tonal-button>Delete</md-filled-tonal-button>
+              <md-outlined-button>Cancel</md-outlined-button>
+            </div>
+          </form>
+        </mock:shadow-root>
+      </xpoky-ambulance-wl-editor>
+    `);
   });
 });

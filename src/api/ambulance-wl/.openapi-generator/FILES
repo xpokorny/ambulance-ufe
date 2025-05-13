@@ -1,8 +1,10 @@
-apis/AmbulanceConditionsApi.ts
-apis/AmbulanceWaitingListApi.ts
+apis/AppointmentsApi.ts
+apis/LocationsApi.ts
+apis/UsersApi.ts
 apis/index.ts
 index.ts
-models/Condition.ts
-models/WaitingListEntry.ts
+models/Appointment.ts
+models/Location.ts
+models/User.ts
 models/index.ts
 runtime.ts

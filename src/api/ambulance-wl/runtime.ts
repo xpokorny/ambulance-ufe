@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * Waiting List Api
- * Ambulance Waiting List management for Web-In-Cloud system
+ * Appointment Scheduling Api
+ * Medical Appointment Scheduling System
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: xpokorny@stuba.sk

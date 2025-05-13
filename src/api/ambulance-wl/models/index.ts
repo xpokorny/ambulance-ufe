@@ -1,4 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-export * from './Condition';
-export * from './WaitingListEntry';
+export * from './Appointment';
+export * from './Location';
+export * from './User';

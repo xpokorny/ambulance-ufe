@@ -1,5 +1,5 @@
-import { Component, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
-import { AmbulanceWaitingListApi, WaitingListEntry, Configuration } from '../../api/ambulance-wl';
+import { Component, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
+import { AppointmentsApi, Appointment, Configuration } from '../../api/ambulance-wl';
 
 @Component({
   tag: 'xpoky-ambulance-wl-list',
@@ -8,34 +8,62 @@ import { AmbulanceWaitingListApi, WaitingListEntry, Configuration } from '../../
 })
 export class XpokyAmbulanceWlList {
 
-  @Event({ eventName: "entry-clicked"}) entryClicked: EventEmitter<string>;
+  @Event({ eventName: "editor-opened"}) editorOpened: EventEmitter<string>;
   @Prop() apiBase: string;
-  @Prop() ambulanceId: string;
+  @Prop() loggedUserId: string;
   @State() errorMessage: string;
+  @State() appointments: Appointment[] = [];
 
-  waitingPatients: WaitingListEntry[];
+  async componentWillLoad() {
+    await this.getAppointmentsAsync();
+  }
 
-  private async getWaitingPatientsAsync(): Promise<WaitingListEntry[]> {
+  @Watch('loggedUserId')
+  async onUserChange() {
+    await this.getAppointmentsAsync();
+  }
+
+  private async getAppointmentsAsync(): Promise<Appointment[]> {
+    if (!this.loggedUserId) {
+      this.appointments = [];
+      this.errorMessage = undefined;
+      return [];
+    }
     try {
       const configuration = new Configuration({
         basePath: this.apiBase,
       });
 
-      const waitingListApi = new AmbulanceWaitingListApi(configuration);
-      const response = await waitingListApi.getWaitingListEntriesRaw({ambulanceId: this.ambulanceId})
+      const appointmentsApi = new AppointmentsApi(configuration);
+      const response = await appointmentsApi.getAppointmentsRaw({
+        userId: this.loggedUserId
+      });
+
       if (response.raw.status < 299) {
-        return await response.value();
+        this.appointments = await response.value();
+        this.errorMessage = undefined;
       } else {
-        this.errorMessage = `Cannot retrieve list of waiting patients: ${response.raw.statusText}`
+        this.errorMessage = `Cannot retrieve list of appointments: ${response.raw.statusText}`;
       }
     } catch (err: any) {
-      this.errorMessage = `Cannot retrieve list of waiting patients: ${err.message || "unknown"}`
+      this.errorMessage = `Cannot retrieve list of appointments: ${err.message || "unknown"}`;
     }
     return [];
   }
 
-  async componentWillLoad() {
-    this.waitingPatients = await this.getWaitingPatientsAsync();
+  private handleEdit(appointmentId: string) {
+    this.editorOpened.emit(appointmentId);
+  }
+
+  private async handleDelete(appointmentId: string) {
+    try {
+      const configuration = new Configuration({ basePath: this.apiBase });
+      const appointmentsApi = new AppointmentsApi(configuration);
+      await appointmentsApi.deleteAppointment({ appointmentId });
+      await this.getAppointmentsAsync();
+    } catch (err: any) {
+      this.errorMessage = `Cannot delete appointment: ${err.message || "unknown"}`;
+    }
   }
 
   render() {
@@ -44,21 +72,51 @@ export class XpokyAmbulanceWlList {
         {this.errorMessage
           ? <div class="error">{this.errorMessage}</div>
           :
-        <md-list>
-          {this.waitingPatients.map((patient) =>
-            <md-list-item onClick={ () => this.entryClicked.emit(patient.id)}>
-              <div slot="headline">{"MENO PACIENTA: " + patient.name}</div>
-              <div slot="supporting-text">{"TEST | Predpokladaný vstup: " + patient.estimatedStart?.toLocaleString()}</div>
-              <md-icon slot="start">person</md-icon>
-            </md-list-item>
-          )}
-        </md-list>
+          <>
+            <h2>My Appointments</h2>
+            <md-list>
+              {this.appointments
+                .filter(appointment => appointment.patient.id === this.loggedUserId)
+                .map((appointment) =>
+                <md-list-item>
+                  <div slot="headline">{"Patient: " + (appointment.patient?.name || "")}</div>
+                  <div slot="supporting-text">{"Doctor: " + (appointment.doctor?.name || "")}</div>
+                  <div slot="supporting-text">{"Location: " + (appointment.location?.name || "") + " - " + (appointment.location?.address || "")}</div>
+                  <div slot="supporting-text">{"Date: " + (appointment.dateTime ? new Date(appointment.dateTime).toLocaleString() : "")}</div>
+                  <md-icon slot="start">person</md-icon>
+                  <span slot="end">
+                    <md-filled-tonal-button onClick={() => this.handleEdit(appointment.id)}><md-icon>edit</md-icon></md-filled-tonal-button>
+                    <md-filled-tonal-button onClick={() => this.handleDelete(appointment.id)}><md-icon>delete</md-icon></md-filled-tonal-button>
+                  </span>
+                </md-list-item>
+              )}
+            </md-list>
+
+            <h2>Created Appointments</h2>
+            <md-list>
+              {this.appointments
+                .filter(appointment => appointment.createdBy.id === this.loggedUserId)
+                .map((appointment) =>
+                <md-list-item>
+                  <div slot="headline">{"Patient: " + (appointment.patient?.name || "")}</div>
+                  <div slot="supporting-text">{"Doctor: " + (appointment.doctor?.name || "")}</div>
+                  <div slot="supporting-text">{"Location: " + (appointment.location?.name || "") + " - " + (appointment.location?.address || "")}</div>
+                  <div slot="supporting-text">{"Date: " + (appointment.dateTime ? new Date(appointment.dateTime).toLocaleString() : "")}</div>
+                  <md-icon slot="start">person</md-icon>
+                  <span slot="end">
+                    <md-filled-tonal-button onClick={() => this.handleEdit(appointment.id)}><md-icon>edit</md-icon></md-filled-tonal-button>
+                    <md-filled-tonal-button onClick={() => this.handleDelete(appointment.id)}><md-icon>delete</md-icon></md-filled-tonal-button>
+                  </span>
+                </md-list-item>
+              )}
+            </md-list>
+          </>
         }
-      <md-filled-icon-button class="add-button"
-        onclick={() => this.entryClicked.emit("@new")}>
-        <md-icon>add</md-icon>
-      </md-filled-icon-button>
-    </Host>
+        <md-filled-icon-button class="add-button"
+          onclick={() => this.editorOpened.emit("@new")}> 
+          <md-icon>add</md-icon>
+        </md-filled-icon-button>
+      </Host>
     );
   }
 }

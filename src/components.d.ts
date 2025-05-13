@@ -6,33 +6,20 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
-    interface MyComponent {
-        /**
-          * The first name
-         */
-        "first": string;
-        /**
-          * The last name
-         */
-        "last": string;
-        /**
-          * The middle name
-         */
-        "middle": string;
-    }
     interface XpokyAmbulanceWlApp {
-        "ambulanceId": string;
         "apiBase": string;
         "basePath": string;
     }
     interface XpokyAmbulanceWlEditor {
-        "ambulanceId": string;
         "apiBase": string;
-        "entryId": string;
+        "appointmentId": string;
+        "loggedUserId": string;
+        "loggedUserName": string;
+        "loggedUserRole": string;
     }
     interface XpokyAmbulanceWlList {
-        "ambulanceId": string;
         "apiBase": string;
+        "loggedUserId": string;
     }
 }
 export interface XpokyAmbulanceWlEditorCustomEvent<T> extends CustomEvent<T> {
@@ -44,12 +31,6 @@ export interface XpokyAmbulanceWlListCustomEvent<T> extends CustomEvent<T> {
     target: HTMLXpokyAmbulanceWlListElement;
 }
 declare global {
-    interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
-    }
-    var HTMLMyComponentElement: {
-        prototype: HTMLMyComponentElement;
-        new (): HTMLMyComponentElement;
-    };
     interface HTMLXpokyAmbulanceWlAppElement extends Components.XpokyAmbulanceWlApp, HTMLStencilElement {
     }
     var HTMLXpokyAmbulanceWlAppElement: {
@@ -74,7 +55,7 @@ declare global {
         new (): HTMLXpokyAmbulanceWlEditorElement;
     };
     interface HTMLXpokyAmbulanceWlListElementEventMap {
-        "entry-clicked": string;
+        "editor-opened": string;
     }
     interface HTMLXpokyAmbulanceWlListElement extends Components.XpokyAmbulanceWlList, HTMLStencilElement {
         addEventListener<K extends keyof HTMLXpokyAmbulanceWlListElementEventMap>(type: K, listener: (this: HTMLXpokyAmbulanceWlListElement, ev: XpokyAmbulanceWlListCustomEvent<HTMLXpokyAmbulanceWlListElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -91,45 +72,30 @@ declare global {
         new (): HTMLXpokyAmbulanceWlListElement;
     };
     interface HTMLElementTagNameMap {
-        "my-component": HTMLMyComponentElement;
         "xpoky-ambulance-wl-app": HTMLXpokyAmbulanceWlAppElement;
         "xpoky-ambulance-wl-editor": HTMLXpokyAmbulanceWlEditorElement;
         "xpoky-ambulance-wl-list": HTMLXpokyAmbulanceWlListElement;
     }
 }
 declare namespace LocalJSX {
-    interface MyComponent {
-        /**
-          * The first name
-         */
-        "first"?: string;
-        /**
-          * The last name
-         */
-        "last"?: string;
-        /**
-          * The middle name
-         */
-        "middle"?: string;
-    }
     interface XpokyAmbulanceWlApp {
-        "ambulanceId"?: string;
         "apiBase"?: string;
         "basePath"?: string;
     }
     interface XpokyAmbulanceWlEditor {
-        "ambulanceId"?: string;
         "apiBase"?: string;
-        "entryId"?: string;
+        "appointmentId"?: string;
+        "loggedUserId"?: string;
+        "loggedUserName"?: string;
+        "loggedUserRole"?: string;
         "onEditor-closed"?: (event: XpokyAmbulanceWlEditorCustomEvent<string>) => void;
     }
     interface XpokyAmbulanceWlList {
-        "ambulanceId"?: string;
         "apiBase"?: string;
-        "onEntry-clicked"?: (event: XpokyAmbulanceWlListCustomEvent<string>) => void;
+        "loggedUserId"?: string;
+        "onEditor-opened"?: (event: XpokyAmbulanceWlListCustomEvent<string>) => void;
     }
     interface IntrinsicElements {
-        "my-component": MyComponent;
         "xpoky-ambulance-wl-app": XpokyAmbulanceWlApp;
         "xpoky-ambulance-wl-editor": XpokyAmbulanceWlEditor;
         "xpoky-ambulance-wl-list": XpokyAmbulanceWlList;
@@ -139,7 +105,6 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
             "xpoky-ambulance-wl-app": LocalJSX.XpokyAmbulanceWlApp & JSXBase.HTMLAttributes<HTMLXpokyAmbulanceWlAppElement>;
             "xpoky-ambulance-wl-editor": LocalJSX.XpokyAmbulanceWlEditor & JSXBase.HTMLAttributes<HTMLXpokyAmbulanceWlEditorElement>;
             "xpoky-ambulance-wl-list": LocalJSX.XpokyAmbulanceWlList & JSXBase.HTMLAttributes<HTMLXpokyAmbulanceWlListElement>;
