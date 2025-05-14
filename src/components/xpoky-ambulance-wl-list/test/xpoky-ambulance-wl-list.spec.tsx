@@ -24,6 +24,7 @@ describe('xpoky-ambulance-wl-list', () => {
       components: [XpokyAmbulanceWlList],
       html: `<xpoky-ambulance-wl-list api-base="http://localhost/api" logged-user-id="1"></xpoky-ambulance-wl-list>`,
     });
+    await page.waitForChanges();
     expect(page.root).toEqualHtml(`
       <xpoky-ambulance-wl-list api-base="http://localhost/api" logged-user-id="1">
         <mock:shadow-root>

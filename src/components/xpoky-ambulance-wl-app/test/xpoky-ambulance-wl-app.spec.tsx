@@ -5,13 +5,25 @@ import fetchMock from 'jest-fetch-mock';
 describe('xpoky-ambulance-wl-app', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
-    // Mock the API responses
+    // Mock the users API response
     fetchMock.mockResponseOnce(JSON.stringify([
       { id: "1", name: "John Doe", role: "patient" },
       { id: "2", name: "Dr. Smith", role: "doctor" }
     ]));
+    // Mock the locations API response
     fetchMock.mockResponseOnce(JSON.stringify([
       { id: "1", name: "Main Hospital", address: "123 Main St" }
+    ]));
+    // Mock the appointments API response
+    fetchMock.mockResponseOnce(JSON.stringify([
+      {
+        id: "1",
+        patient: { id: "1", name: "John Doe", role: "patient" },
+        doctor: { id: "2", name: "Dr. Smith", role: "doctor" },
+        location: { id: "1", name: "Main Hospital", address: "123 Main St" },
+        dateTime: new Date("2024-03-20T10:00:00"),
+        createdBy: { id: "1", name: "John Doe", role: "patient" }
+      }
     ]));
   });
 
