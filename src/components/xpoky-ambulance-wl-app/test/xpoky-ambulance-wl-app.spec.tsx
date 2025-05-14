@@ -42,7 +42,7 @@ describe('xpoky-ambulance-wl-app', () => {
     const page = await newSpecPage({
       url: 'http://localhost/entry/@new',
       components: [XpokyAmbulanceWlApp],
-      html: `<xpoky-ambulance-wl-app base-path="/" api-base="http://localhost/api"></xpoky-ambulance-wl-app>`,
+      html: `<xpoky-ambulance-wl-app base-path="/" api-base="http://localhost"></xpoky-ambulance-wl-app>`,
     });
     page.win.navigation = new EventTarget();
     await page.waitForChanges();
@@ -53,7 +53,7 @@ describe('xpoky-ambulance-wl-app', () => {
     const page = await newSpecPage({
       url: 'http://localhost/ambulance-wl/',
       components: [XpokyAmbulanceWlApp],
-      html: `<xpoky-ambulance-wl-app base-path="/ambulance-wl/" api-base="http://localhost/api"></xpoky-ambulance-wl-app>`,
+      html: `<xpoky-ambulance-wl-app base-path="/ambulance-wl/" api-base="http://localhost"></xpoky-ambulance-wl-app>`,
     });
     page.win.navigation = new EventTarget();
     await page.waitForChanges();
