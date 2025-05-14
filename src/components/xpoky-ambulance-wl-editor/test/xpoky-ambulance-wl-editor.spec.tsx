@@ -19,10 +19,10 @@ describe('xpoky-ambulance-wl-editor', () => {
   it('renders', async () => {
     const page = await newSpecPage({
       components: [XpokyAmbulanceWlEditor],
-      html: `<xpoky-ambulance-wl-editor></xpoky-ambulance-wl-editor>`,
+      html: `<xpoky-ambulance-wl-editor api-base="http://localhost/api"></xpoky-ambulance-wl-editor>`,
     });
     expect(page.root).toEqualHtml(`
-      <xpoky-ambulance-wl-editor>
+      <xpoky-ambulance-wl-editor api-base="http://localhost/api">
         <mock:shadow-root>
           <form>
             <md-filled-text-field label="Patient Name"></md-filled-text-field>
@@ -42,13 +42,13 @@ describe('xpoky-ambulance-wl-editor', () => {
   it('renders with error message', async () => {
     const page = await newSpecPage({
       components: [XpokyAmbulanceWlEditor],
-      html: `<xpoky-ambulance-wl-editor></xpoky-ambulance-wl-editor>`,
+      html: `<xpoky-ambulance-wl-editor api-base="http://localhost/api"></xpoky-ambulance-wl-editor>`,
     });
     const editor = page.rootInstance as XpokyAmbulanceWlEditor;
     editor.errorMessage = "Test error message";
     await page.waitForChanges();
     expect(page.root).toEqualHtml(`
-      <xpoky-ambulance-wl-editor>
+      <xpoky-ambulance-wl-editor api-base="http://localhost/api">
         <mock:shadow-root>
           <div class="error">Test error message</div>
         </mock:shadow-root>
@@ -68,13 +68,13 @@ describe('xpoky-ambulance-wl-editor', () => {
 
     const page = await newSpecPage({
       components: [XpokyAmbulanceWlEditor],
-      html: `<xpoky-ambulance-wl-editor></xpoky-ambulance-wl-editor>`,
+      html: `<xpoky-ambulance-wl-editor api-base="http://localhost/api"></xpoky-ambulance-wl-editor>`,
     });
     const editor = page.rootInstance as XpokyAmbulanceWlEditor;
     editor.appointment = appointment;
     await page.waitForChanges();
     expect(page.root).toEqualHtml(`
-      <xpoky-ambulance-wl-editor>
+      <xpoky-ambulance-wl-editor api-base="http://localhost/api">
         <mock:shadow-root>
           <form>
             <md-filled-text-field label="Patient Name" value="John Doe"></md-filled-text-field>

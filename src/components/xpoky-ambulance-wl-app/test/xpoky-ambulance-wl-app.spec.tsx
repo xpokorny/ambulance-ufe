@@ -10,6 +10,9 @@ describe('xpoky-ambulance-wl-app', () => {
       { id: "1", name: "John Doe", role: "patient" },
       { id: "2", name: "Dr. Smith", role: "doctor" }
     ]));
+    fetchMock.mockResponseOnce(JSON.stringify([
+      { id: "1", name: "Main Hospital", address: "123 Main St" }
+    ]));
   });
 
   it('renders editor', async () => {

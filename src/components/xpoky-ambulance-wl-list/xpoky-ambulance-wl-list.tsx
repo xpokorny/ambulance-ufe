@@ -71,46 +71,45 @@ export class XpokyAmbulanceWlList {
       <Host>
         {this.errorMessage
           ? <div class="error">{this.errorMessage}</div>
-          :
-          <>
-            <h2>My Appointments</h2>
-            <md-list>
-              {this.appointments
-                .filter(appointment => appointment.patient.id === this.loggedUserId)
-                .map((appointment) =>
-                <md-list-item>
-                  <div slot="headline">{"Patient: " + (appointment.patient?.name || "")}</div>
-                  <div slot="supporting-text">{"Doctor: " + (appointment.doctor?.name || "")}</div>
-                  <div slot="supporting-text">{"Location: " + (appointment.location?.name || "") + " - " + (appointment.location?.address || "")}</div>
-                  <div slot="supporting-text">{"Date: " + (appointment.dateTime ? new Date(appointment.dateTime).toLocaleString() : "")}</div>
-                  <md-icon slot="start">person</md-icon>
-                  <span slot="end">
-                    <md-filled-tonal-button onClick={() => this.handleEdit(appointment.id)}><md-icon>edit</md-icon></md-filled-tonal-button>
-                    <md-filled-tonal-button onClick={() => this.handleDelete(appointment.id)}><md-icon>delete</md-icon></md-filled-tonal-button>
-                  </span>
-                </md-list-item>
-              )}
-            </md-list>
+          : <div class="appointments-container">
+              <h2>My Appointments</h2>
+              <md-list>
+                {this.appointments
+                  .filter(appointment => appointment.patient.id === this.loggedUserId)
+                  .map((appointment) =>
+                  <md-list-item>
+                    <div slot="headline">{"Patient: " + (appointment.patient?.name || "")}</div>
+                    <div slot="supporting-text">{"Doctor: " + (appointment.doctor?.name || "")}</div>
+                    <div slot="supporting-text">{"Location: " + (appointment.location?.name || "") + " - " + (appointment.location?.address || "")}</div>
+                    <div slot="supporting-text">{"Date: " + (appointment.dateTime ? new Date(appointment.dateTime).toLocaleString() : "")}</div>
+                    <md-icon slot="start">person</md-icon>
+                    <span slot="end">
+                      <md-filled-tonal-button onClick={() => this.handleEdit(appointment.id)}><md-icon>edit</md-icon></md-filled-tonal-button>
+                      <md-filled-tonal-button onClick={() => this.handleDelete(appointment.id)}><md-icon>delete</md-icon></md-filled-tonal-button>
+                    </span>
+                  </md-list-item>
+                )}
+              </md-list>
 
-            <h2>Created Appointments</h2>
-            <md-list>
-              {this.appointments
-                .filter(appointment => appointment.createdBy.id === this.loggedUserId)
-                .map((appointment) =>
-                <md-list-item>
-                  <div slot="headline">{"Patient: " + (appointment.patient?.name || "")}</div>
-                  <div slot="supporting-text">{"Doctor: " + (appointment.doctor?.name || "")}</div>
-                  <div slot="supporting-text">{"Location: " + (appointment.location?.name || "") + " - " + (appointment.location?.address || "")}</div>
-                  <div slot="supporting-text">{"Date: " + (appointment.dateTime ? new Date(appointment.dateTime).toLocaleString() : "")}</div>
-                  <md-icon slot="start">person</md-icon>
-                  <span slot="end">
-                    <md-filled-tonal-button onClick={() => this.handleEdit(appointment.id)}><md-icon>edit</md-icon></md-filled-tonal-button>
-                    <md-filled-tonal-button onClick={() => this.handleDelete(appointment.id)}><md-icon>delete</md-icon></md-filled-tonal-button>
-                  </span>
-                </md-list-item>
-              )}
-            </md-list>
-          </>
+              <h2>Created Appointments</h2>
+              <md-list>
+                {this.appointments
+                  .filter(appointment => appointment.createdBy.id === this.loggedUserId)
+                  .map((appointment) =>
+                  <md-list-item>
+                    <div slot="headline">{"Patient: " + (appointment.patient?.name || "")}</div>
+                    <div slot="supporting-text">{"Doctor: " + (appointment.doctor?.name || "")}</div>
+                    <div slot="supporting-text">{"Location: " + (appointment.location?.name || "") + " - " + (appointment.location?.address || "")}</div>
+                    <div slot="supporting-text">{"Date: " + (appointment.dateTime ? new Date(appointment.dateTime).toLocaleString() : "")}</div>
+                    <md-icon slot="start">person</md-icon>
+                    <span slot="end">
+                      <md-filled-tonal-button onClick={() => this.handleEdit(appointment.id)}><md-icon>edit</md-icon></md-filled-tonal-button>
+                      <md-filled-tonal-button onClick={() => this.handleDelete(appointment.id)}><md-icon>delete</md-icon></md-filled-tonal-button>
+                    </span>
+                  </md-list-item>
+                )}
+              </md-list>
+            </div>
         }
         <md-filled-icon-button class="add-button"
           onclick={() => this.editorOpened.emit("@new")}> 
