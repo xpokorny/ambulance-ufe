@@ -6,18 +6,35 @@ import { Appointment } from '../../../api/ambulance-wl';
 describe('xpoky-ambulance-wl-editor', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
-    // Mock the users API response for patients
-    fetchMock.mockResponseOnce(JSON.stringify([
-      { id: "1", name: "John Doe", role: "patient" }
-    ]));
-    // Mock the users API response for doctors
-    fetchMock.mockResponseOnce(JSON.stringify([
-      { id: "2", name: "Dr. Smith", role: "doctor" }
-    ]));
-    // Mock the locations API response
-    fetchMock.mockResponseOnce(JSON.stringify([
-      { id: "1", name: "Main Hospital", address: "123 Main St" }
-    ]));
+    // Mock all API calls
+    fetchMock.mockImplementation((req: Request | string) => {
+      const url = typeof req === 'string' ? req : req.url;
+      if (url.includes('/api/users?role=patient')) {
+        return Promise.resolve(new Response(JSON.stringify([
+          { id: "1", name: "John Doe", role: "patient" }
+        ]), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' }
+        }));
+      }
+      if (url.includes('/api/users?role=doctor')) {
+        return Promise.resolve(new Response(JSON.stringify([
+          { id: "2", name: "Dr. Smith", role: "doctor" }
+        ]), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' }
+        }));
+      }
+      if (url.includes('/api/locations')) {
+        return Promise.resolve(new Response(JSON.stringify([
+          { id: "1", name: "Main Hospital", address: "123 Main St" }
+        ]), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' }
+        }));
+      }
+      return Promise.reject(new Error('Not found'));
+    });
   });
 
   it('renders', async () => {

@@ -6,17 +6,26 @@ import fetchMock from 'jest-fetch-mock';
 describe('xpoky-ambulance-wl-list', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
-    // Mock the appointments API response
-    fetchMock.mockResponseOnce(JSON.stringify([
-      {
-        id: "1",
-        patient: { id: "1", name: "John Doe", role: "patient" },
-        doctor: { id: "2", name: "Dr. Smith", role: "doctor" },
-        location: { id: "1", name: "Main Hospital", address: "123 Main St" },
-        dateTime: new Date("2024-03-20T10:00:00"),
-        createdBy: { id: "1", name: "John Doe", role: "patient" }
+    // Mock all API calls
+    fetchMock.mockImplementation((req: Request | string) => {
+      const url = typeof req === 'string' ? req : req.url;
+      if (url.includes('/api/appointments')) {
+        return Promise.resolve(new Response(JSON.stringify([
+          {
+            id: "1",
+            patient: { id: "1", name: "John Doe", role: "patient" },
+            doctor: { id: "2", name: "Dr. Smith", role: "doctor" },
+            location: { id: "1", name: "Main Hospital", address: "123 Main St" },
+            dateTime: new Date("2024-03-20T10:00:00"),
+            createdBy: { id: "1", name: "John Doe", role: "patient" }
+          }
+        ]), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' }
+        }));
       }
-    ]));
+      return Promise.reject(new Error('Not found'));
+    });
   });
 
   it('renders', async () => {
