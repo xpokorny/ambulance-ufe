@@ -5,7 +5,37 @@ import fetchMock from 'jest-fetch-mock';
 describe('xpoky-ambulance-wl-app', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
-    fetchMock.mockResponseOnce(JSON.stringify([]));
+    // Mock all API calls before component initialization
+    fetchMock.mockImplementation((req: Request | string) => {
+      const url = typeof req === 'string' ? req : req.url;
+      if (url.includes('/api/users')) {
+        return Promise.resolve(new Response(JSON.stringify([
+          { id: "1", name: "John Doe", role: "patient" },
+          { id: "2", name: "Dr. Smith", role: "doctor" }
+        ]), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' }
+        }));
+      }
+      if (url.includes('/api/locations')) {
+        return Promise.resolve(new Response(JSON.stringify([
+          { id: "1", name: "Main Hospital", address: "123 Main St" }
+        ]), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' }
+        }));
+      }
+      if (url.includes('/api/appointments')) {
+        return Promise.resolve(new Response(JSON.stringify([]), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' }
+        }));
+      }
+      return Promise.resolve(new Response(JSON.stringify([]), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      }));
+    });
   });
 
   it('renders editor', async () => {
