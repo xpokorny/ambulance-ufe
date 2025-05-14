@@ -16,7 +16,13 @@ describe('xpoky-ambulance-wl-list', () => {
     expect(page.root).toEqualHtml(`
       <xpoky-ambulance-wl-list>
         <mock:shadow-root>
-          <div class="loading">Loading...</div>
+          <h2>My Appointments</h2>
+          <md-list></md-list>
+          <h2>Created Appointments</h2>
+          <md-list></md-list>
+          <md-filled-icon-button class="add-button">
+            <md-icon>add</md-icon>
+          </md-filled-icon-button>
         </mock:shadow-root>
       </xpoky-ambulance-wl-list>
     `);
@@ -34,6 +40,9 @@ describe('xpoky-ambulance-wl-list', () => {
       <xpoky-ambulance-wl-list>
         <mock:shadow-root>
           <div class="error">Test error message</div>
+          <md-filled-icon-button class="add-button">
+            <md-icon>add</md-icon>
+          </md-filled-icon-button>
         </mock:shadow-root>
       </xpoky-ambulance-wl-list>
     `);
@@ -61,32 +70,45 @@ describe('xpoky-ambulance-wl-list', () => {
 
     const page = await newSpecPage({
       components: [XpokyAmbulanceWlList],
-      html: `<xpoky-ambulance-wl-list></xpoky-ambulance-wl-list>`,
+      html: `<xpoky-ambulance-wl-list logged-user-id="1"></xpoky-ambulance-wl-list>`,
     });
     const list = page.rootInstance as XpokyAmbulanceWlList;
     list.appointments = appointments;
     await page.waitForChanges();
     expect(page.root).toEqualHtml(`
-      <xpoky-ambulance-wl-list>
+      <xpoky-ambulance-wl-list logged-user-id="1">
         <mock:shadow-root>
-          <div class="appointments">
-            <md-list>
-              <md-list-item>
-                <div slot="headline">John Doe</div>
-                <div slot="supporting-text">Dr. Smith - Main Hospital</div>
-                <div slot="supporting-text">March 20, 2024, 10:00 AM</div>
-                <md-icon slot="start">person</md-icon>
-                <md-filled-tonal-button slot="end">Edit</md-filled-tonal-button>
-              </md-list-item>
-              <md-list-item>
-                <div slot="headline">Jane Smith</div>
-                <div slot="supporting-text">Dr. Smith - Main Hospital</div>
-                <div slot="supporting-text">March 20, 2024, 11:00 AM</div>
-                <md-icon slot="start">person</md-icon>
-                <md-filled-tonal-button slot="end">Edit</md-filled-tonal-button>
-              </md-list-item>
-            </md-list>
-          </div>
+          <h2>My Appointments</h2>
+          <md-list>
+            <md-list-item>
+              <div slot="headline">Patient: John Doe</div>
+              <div slot="supporting-text">Doctor: Dr. Smith</div>
+              <div slot="supporting-text">Location: Main Hospital - 123 Main St</div>
+              <div slot="supporting-text">Date: 3/20/2024, 10:00:00 AM</div>
+              <md-icon slot="start">person</md-icon>
+              <span slot="end">
+                <md-filled-tonal-button><md-icon>edit</md-icon></md-filled-tonal-button>
+                <md-filled-tonal-button><md-icon>delete</md-icon></md-filled-tonal-button>
+              </span>
+            </md-list-item>
+          </md-list>
+          <h2>Created Appointments</h2>
+          <md-list>
+            <md-list-item>
+              <div slot="headline">Patient: John Doe</div>
+              <div slot="supporting-text">Doctor: Dr. Smith</div>
+              <div slot="supporting-text">Location: Main Hospital - 123 Main St</div>
+              <div slot="supporting-text">Date: 3/20/2024, 10:00:00 AM</div>
+              <md-icon slot="start">person</md-icon>
+              <span slot="end">
+                <md-filled-tonal-button><md-icon>edit</md-icon></md-filled-tonal-button>
+                <md-filled-tonal-button><md-icon>delete</md-icon></md-filled-tonal-button>
+              </span>
+            </md-list-item>
+          </md-list>
+          <md-filled-icon-button class="add-button">
+            <md-icon>add</md-icon>
+          </md-filled-icon-button>
         </mock:shadow-root>
       </xpoky-ambulance-wl-list>
     `);

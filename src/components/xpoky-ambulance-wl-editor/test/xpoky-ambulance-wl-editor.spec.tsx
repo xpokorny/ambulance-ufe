@@ -6,6 +6,14 @@ import { Appointment } from '../../../api/ambulance-wl';
 describe('xpoky-ambulance-wl-editor', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
+    // Mock the API responses
+    fetchMock.mockResponseOnce(JSON.stringify([
+      { id: "1", name: "John Doe", role: "patient" },
+      { id: "2", name: "Dr. Smith", role: "doctor" }
+    ]));
+    fetchMock.mockResponseOnce(JSON.stringify([
+      { id: "1", name: "Main Hospital", address: "123 Main St" }
+    ]));
   });
 
   it('renders', async () => {
@@ -16,7 +24,16 @@ describe('xpoky-ambulance-wl-editor', () => {
     expect(page.root).toEqualHtml(`
       <xpoky-ambulance-wl-editor>
         <mock:shadow-root>
-          <div class="loading">Loading...</div>
+          <form>
+            <md-filled-text-field label="Patient Name"></md-filled-text-field>
+            <md-filled-select label="Doctor"></md-filled-select>
+            <md-filled-select label="Location"></md-filled-select>
+            <md-filled-text-field label="Date and Time" type="datetime-local"></md-filled-text-field>
+            <div class="actions">
+              <md-filled-button>Save</md-filled-button>
+              <md-outlined-button>Cancel</md-outlined-button>
+            </div>
+          </form>
         </mock:shadow-root>
       </xpoky-ambulance-wl-editor>
     `);
