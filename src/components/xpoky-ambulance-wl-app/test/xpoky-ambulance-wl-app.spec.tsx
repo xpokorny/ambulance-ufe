@@ -7,6 +7,13 @@ describe('xpoky-ambulance-wl-app', () => {
       components: [XpokyAmbulanceWlApp],
       html: `<xpoky-ambulance-wl-app></xpoky-ambulance-wl-app>`,
     });
-    expect(page.root).toBeTruthy();
+
+    expect(page.root).toEqualHtml(`
+      <xpoky-ambulance-wl-app>
+        <mock:shadow-root>
+          <slot></slot>
+        </mock:shadow-root>
+      </xpoky-ambulance-wl-app>
+    `);
   });
 });
